@@ -1,9 +1,9 @@
 from flask import Flask, escape, redirect, url_for  # we import the Flask class
 # creating an instance of the class, __name__ is used to identify the root path of the application
-app = Flask(__name__)
+app = Flask(__name__) 
 
 
-@app.route("/")  # to tell Flask what URL should trigger the function
+@app.route("/hi")  # to tell Flask what URL should trigger the function
 def hello_world():
     return "<p> Hello World </p>"
 
@@ -17,16 +17,14 @@ def employer_info():
 
 @app.route("/testing2")
 def testing_escape():
-    user_input = '<script>alert("XSS attack"); </script>'
-    escaped_input = escape(user_input)
+    user_input = '<script>alert("XSS attack"); </script>' 
+    escaped_input = escape(user_input) 
     return f"Escaped: {escaped_input}"
-
 
 '''
 When you write a function with the @app.route decorator, it tells Flask that whenever a user accesses a specific URL (the route) 
 on your website, Flask should execute that Python function and return the result as the response to the user's request.
 '''
-
 
 # if i type in my url /sama, then this would print Hello, Sama
 @app.route("/<name>")
@@ -38,6 +36,21 @@ def hello(name):
 def user_greet(username):
     return f"Welcome Back, {username}"
 
+@app.route("/")
+def home():
+    return redirect(url_for("about"))
+
+@app.route("/about")
+def about():
+    return "This is the about page"
+
+@app.route("/post/int:<id>") # the int: is used to convert the id to an integer
+def user_id(id): 
+    return f"User ID: {id}" 
+
+@app.route("/path/<path:subpath>") # the path: is used to convert the subpath to a path
+def user_subpath(subpath):
+    return f"Subpath: {subpath}"
 
 if __name__ == '__main__':
     app.run(debug=True)
